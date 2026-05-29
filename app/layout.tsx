@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import Navbar from "@/components/Navbar";
@@ -24,8 +25,12 @@ export default function RootLayout({
         <SessionProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
-          <footer className="bg-[#1a1a1a] text-white text-center py-4 text-sm mt-8">
-            © 2025 サカサポ
+          <footer className="bg-[#1a1a1a] text-white text-center py-6 text-sm mt-8">
+            <div className="flex justify-center gap-6 mb-2">
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">プライバシーポリシー</Link>
+              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">利用規約</Link>
+            </div>
+            <p className="text-gray-500">© 2025 サカサポ</p>
           </footer>
         </SessionProvider>
       </body>
