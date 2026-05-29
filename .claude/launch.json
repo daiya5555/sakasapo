@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "soccer-app",
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["/Users/matsushimadaiya/親子サッカーアプリ/start-dev.sh"],
+      "port": 3000,
+      "autoPort": false,
+      "env": {
+        "PATH": "/Users/matsushimadaiya/node/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      }
+    }
+  ]
+}

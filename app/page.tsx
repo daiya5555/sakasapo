@@ -1,65 +1,125 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+const QUICK_SKILLS = ["ドリブル", "パス", "シュート", "トラップ", "リフティング", "フェイント", "ディフェンス", "体幹"];
+
+export default function HomePage() {
+  const router = useRouter();
+  const [q, setQ] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+
+  const toggleSkill = (skill: string) => {
+    setSelectedSkills(prev =>
+      prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
+    );
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (q.trim())              params.set("q", q.trim());
+    if (selectedSkills.length) params.set("skills", selectedSkills.join(","));
+    router.push(`/practices?${params.toString()}`);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="max-w-3xl mx-auto px-4 py-14">
+
+      {/* Hero */}
+      <div className="text-center mb-10">
+        <div className="text-6xl mb-4">⚽</div>
+        <h1 className="text-4xl font-bold text-[#1a1a1a] mb-3">サカサポ</h1>
+        <p className="text-base text-gray-600 max-w-xl mx-auto">
+          親子でできる少人数サッカー練習メニューを投稿・共有・発見しよう
+        </p>
+      </div>
+
+      {/* 検索ボックス */}
+      <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-8">
+        <form onSubmit={handleSearch} className="space-y-4">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={q}
+              onChange={e => setQ(e.target.value)}
+              placeholder="メニュー名・説明文で検索..."
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <button
+              type="submit"
+              className="bg-wine-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-wine-700 transition whitespace-nowrap"
+            >
+              検索
+            </button>
+          </div>
+
+          {/* クイックスキル選択 */}
+          <div>
+            <p className="text-xs text-gray-400 mb-2">スキルで絞り込む（複数選択可）</p>
+            <div className="flex flex-wrap gap-2">
+              {QUICK_SKILLS.map(skill => (
+                <button
+                  key={skill}
+                  type="button"
+                  onClick={() => toggleSkill(skill)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition border ${
+                    selectedSkills.includes(skill)
+                      ? "bg-wine-600 text-white border-wine-600"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-wine-400 hover:text-wine-600"
+                  }`}
+                >
+                  {skill}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {(q || selectedSkills.length > 0) && (
+            <p className="text-xs text-gray-400">
+              {[q && `「${q}」`, selectedSkills.length > 0 && `スキル: ${selectedSkills.join("・")}`]
+                .filter(Boolean).join("　")} で検索します
+            </p>
+          )}
+        </form>
+      </div>
+
+      {/* CTAリンク */}
+      <div className="grid grid-cols-2 gap-4 mb-10">
+        <Link
+          href="/practices"
+          className="bg-wine-600 text-white rounded-xl p-5 text-center hover:bg-wine-700 transition"
+        >
+          <div className="text-3xl mb-2">📋</div>
+          <div className="font-bold">練習メニュー一覧</div>
+          <div className="text-xs opacity-80 mt-1">すべてのメニューを見る</div>
+        </Link>
+        <Link
+          href="/practices/new"
+          className="bg-white border-2 border-wine-600 text-wine-600 rounded-xl p-5 text-center hover:bg-wine-50 transition"
+        >
+          <div className="text-3xl mb-2">✏️</div>
+          <div className="font-bold">練習メニューを投稿</div>
+          <div className="text-xs opacity-70 mt-1">あなたの練習を共有する</div>
+        </Link>
+      </div>
+
+      {/* 特徴 */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { icon: "👨‍👧", title: "親子で楽しく", desc: "2人からできる練習メニューが充実" },
+          { icon: "🎬", title: "動画で確認",   desc: "YouTube動画付きの分かりやすい解説" },
+          { icon: "🔍", title: "かんたん検索", desc: "スキル・難易度・年齢で絞り込める" },
+        ].map(f => (
+          <div key={f.title} className="bg-white rounded-xl p-4 text-center shadow-sm border border-gray-100 hover:border-gold-200 transition">
+            <div className="text-3xl mb-2">{f.icon}</div>
+            <div className="font-semibold text-sm text-[#1a1a1a] mb-1">{f.title}</div>
+            <div className="text-xs text-gray-500">{f.desc}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
