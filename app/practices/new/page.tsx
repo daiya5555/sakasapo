@@ -36,13 +36,6 @@ export default function NewPracticePage() {
   const [customSkill, setCustomSkill] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [youtubeSearching, setYoutubeSearching] = useState(false);
-  const [youtubeResult, setYoutubeResult] = useState<{
-    mode?: string;
-    searchUrl?: string;
-    query?: string;
-    message?: string;
-  } | null>(null);
 
   // 使用状況
   const [usage, setUsage] = useState<UsageData | null>(null);
@@ -114,37 +107,6 @@ export default function NewPracticePage() {
     setVideoPreviewUrl(null);
     setUploadProgress("idle");
     if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  // AI + YouTube自動検索
-  const handleYoutubeSearch = async () => {
-    if (!form.title.trim()) {
-      setError("先にタイトルを入力してください");
-      return;
-    }
-    setYoutubeSearching(true);
-    setYoutubeResult(null);
-    setError("");
-    try {
-      const res = await fetch("/api/youtube-search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: form.title, skills: selectedSkills }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-
-      if (data.mode === "youtube_api" && data.url) {
-        setForm((f) => ({ ...f, youtubeUrl: data.url }));
-        setYoutubeResult({ mode: "youtube_api" });
-      } else if (data.mode === "search_url") {
-        setYoutubeResult(data);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "YouTube検索に失敗しました");
-    } finally {
-      setYoutubeSearching(false);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -435,27 +397,11 @@ export default function NewPracticePage() {
           )}
         </div>
 
-        {/* YouTube URL + AI自動取得 */}
+        {/* YouTube URL */}
         <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-sm font-semibold text-gray-700">
-              YouTube URL（任意）
-            </label>
-            <button
-              type="button"
-              onClick={handleYoutubeSearch}
-              disabled={youtubeSearching || !form.title.trim()}
-              className="flex items-center gap-1.5 bg-wine-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-wine-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {youtubeSearching ? (
-                <>
-                  <span className="animate-spin">⚽</span> 検索中...
-                </>
-              ) : (
-                <>🎬 AI自動取得</>
-              )}
-            </button>
-          </div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+            YouTube URL（任意）
+          </label>
           <input
             type="url"
             value={form.youtubeUrl}
@@ -463,35 +409,9 @@ export default function NewPracticePage() {
             placeholder="https://www.youtube.com/watch?v=..."
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-400"
           />
-
-          {youtubeResult?.mode === "youtube_api" && (
-            <p className="text-xs text-green-600 mt-1">✓ YouTube動画を自動取得しました</p>
-          )}
-
-          {youtubeResult?.mode === "search_url" && (
-            <div className="mt-2 p-3 bg-gold-50 rounded-lg border border-gold-200 text-xs">
-              <p className="text-gray-600 mb-1">
-                💡 <span className="font-medium">AIが生成した検索クエリ：</span>「{youtubeResult.query}」
-              </p>
-              <a
-                href={youtubeResult.searchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-wine-600 hover:underline font-medium"
-              >
-                → YouTubeで動画を検索する ↗
-              </a>
-              <p className="text-gray-400 mt-1">
-                ※ YouTube Data APIキーを.envに設定すると自動でURLが入力されます
-              </p>
-            </div>
-          )}
-
-          {!youtubeResult && (
-            <p className="text-xs text-gray-400 mt-1">
-              URLを直接貼るか「AI自動取得」でYouTubeから関連動画を検索できます
-            </p>
-          )}
+          <p className="text-xs text-gray-400 mt-1">
+            関連するYouTube動画のURLを貼り付けてください
+          </p>
         </div>
 
         {error && (
