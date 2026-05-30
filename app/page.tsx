@@ -111,50 +111,52 @@ export default function HomePage() {
         <h2 className="text-lg font-bold text-center text-[#1a1a1a] mb-4">プランを選ぶ</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* 無料 */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm flex flex-col">
             <div className="text-center mb-4">
               <div className="text-2xl mb-1">⚽</div>
               <div className="font-bold text-lg">無料プラン</div>
               <div className="text-2xl font-bold mt-1">¥0<span className="text-sm font-normal text-gray-400">/月</span></div>
             </div>
-            <ul className="text-sm text-gray-600 space-y-2">
+            <ul className="text-sm text-gray-600 space-y-2 flex-1">
               <li>✅ 練習メニュー投稿（月10件）</li>
               <li>✅ 動画アップロード（1GBまで）</li>
               <li>✅ いいね・コメント</li>
               <li className="text-gray-300">❌ 投稿無制限</li>
             </ul>
+            <Link href="/plans" className="mt-4 block text-center text-sm text-gray-500 hover:text-wine-600 underline">詳しく見る</Link>
           </div>
           {/* スタンダード */}
-          <div className="bg-wine-600 text-white rounded-xl border border-wine-600 p-5 shadow-md relative">
+          <div className="bg-wine-600 text-white rounded-xl border border-wine-600 p-5 shadow-md relative flex flex-col">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold-400 text-white text-xs font-bold px-3 py-1 rounded-full">人気</div>
             <div className="text-center mb-4">
               <div className="text-2xl mb-1">🏆</div>
               <div className="font-bold text-lg">スタンダード</div>
               <div className="text-2xl font-bold mt-1">¥500<span className="text-sm font-normal opacity-70">/月</span></div>
             </div>
-            <ul className="text-sm space-y-2">
+            <ul className="text-sm space-y-2 flex-1">
               <li>✅ 練習メニュー投稿（無制限）</li>
               <li>✅ 動画アップロード（5GBまで）</li>
               <li>✅ いいね・コメント</li>
               <li>✅ 優先サポート</li>
             </ul>
+            <Link href="/plans" className="mt-4 block text-center text-sm text-white/80 hover:text-white underline">詳しく見る・申し込む</Link>
           </div>
           {/* コーチ */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm flex flex-col">
             <div className="text-center mb-4">
               <div className="text-2xl mb-1">👨‍🏫</div>
               <div className="font-bold text-lg">コーチプラン</div>
               <div className="text-2xl font-bold mt-1">¥1,500<span className="text-sm font-normal text-gray-400">/月</span></div>
             </div>
-            <ul className="text-sm text-gray-600 space-y-2">
+            <ul className="text-sm text-gray-600 space-y-2 flex-1">
               <li>✅ 練習メニュー投稿（無制限）</li>
               <li>✅ 動画アップロード（20GBまで）</li>
               <li>✅ いいね・コメント</li>
               <li>✅ コーチ向け管理機能</li>
             </ul>
+            <Link href="/plans" className="mt-4 block text-center text-sm text-gray-500 hover:text-wine-600 underline">詳しく見る・申し込む</Link>
           </div>
         </div>
-        <p className="text-center text-xs text-gray-400 mt-4">※ 有料プランは準備中です。近日公開予定。</p>
       </div>
     </div>
   );

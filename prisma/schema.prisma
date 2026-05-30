@@ -100,3 +100,13 @@ model Comment {
   practice   Practice @relation(fields: [practiceId], references: [id])
   createdAt  DateTime @default(now())
 }
+
+model PlanInquiry {
+  id        String   @id @default(cuid())
+  plan      String
+  planName  String
+  name      String
+  email     String
+  message   String   @default("")
+  createdAt DateTime @default(now())
+}
