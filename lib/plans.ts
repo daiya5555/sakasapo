@@ -5,8 +5,8 @@ export const PLAN_LIMITS = {
     label: "無料",
     postsPerMonth: 10,
     aiSearchesPerMonth: 3,
-    videoUpload: false,
-    videoStorageGB: 0,
+    videoUpload: true,
+    videoStorageGB: 1,
   },
   standard: {
     label: "スタンダード",
